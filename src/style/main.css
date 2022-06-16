@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #141414;
+    color: #e5e5e5;
+    font-family: 'Roboto, Helvetica, Arial' sans-serif;
+}
+
+.navbar {
+    display: flex;
+    height: 68px;
+    align-items: center;
+    background: linear-gradient(180deg, rgba(5,5,5,1) 55%, rgba(18,18,18,1) 100%);
+    padding: 20px;
+    font-size: 14px;
+    letter-spacing: 0.0075em;
+}
+
+.nav-active {
+    font-weight: 700;
+}
+
+.nav-link {
+    padding: 10px;
+}
+
+.nav-link:hover {
+    transition: ease .4s;
+    color: #b3b3b3;
+}
+
+.nav-active:hover {
+    cursor: default;
+    color: #e5e5e5;
+}
+
+.nav__logo {
+    margin-left: 20px;
+    margin-top: 7px;
+    margin-right: 20px;
+    width: 100px;
+    object-fit: contain;
+}
+
+.nav__avatar {
+    margin: 15px;
+    border-radius: 5px;
+}
+
+.form-search {
+    background-color: transparent;
+    width: 0px;
+    -webkit-transition: width .3s ease-in-out;
+    -moz-transition: width .3s ease-in-out;
+    -o-transition: width .3s ease-in-out;
+    transition: width .3s ease-in-out;
+}
+
+.form-search-focused {
+    width: 212px;
+    height: 35px;
+    background-color: transparent;
+    border: 1px solid #e5e5e5;
+    padding: 7px 14px 7px 7px;
+    margin-top: 15px;
+    display: "inline-block";
+    opacity: 1; 
+    -webkit-transition: width .3s ease-in-out;
+    -moz-transition: width .3s ease-in-out;
+    -o-transition: width .3s ease-in-out;
+    transition: width .3s ease-in-out;
+    padding-left: 30px;
+}
+
+.search-icon-active {
+    position: absolute;
+    margin-top: 3px;
+    margin-left: 5px;
+}
