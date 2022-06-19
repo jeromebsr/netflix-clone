@@ -1,21 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios, { AxiosRequestConfig } from "axios";
 import { RootState } from '../app/store';
-export interface moviesSlice {
+export interface intMoviesSlice {
     value: number;
     movies: [];
 }
 
-export interface AxiosResponse<T = never>  {
-    data: T;
-    status: number;
-    statusText: string;
-    headers: Record<string, string>;
-    config: AxiosRequestConfig<T>;
-    request?: any;
+export interface AxiosResponse  {
+    data: []
 }
   
-const initialState: moviesSlice = {
+const initialState: intMoviesSlice = {
     value: 0,
     movies: [],
 };
@@ -31,7 +26,7 @@ export const moviesSlice = createSlice({
         incrementWithNumber: (state, action: PayloadAction<number>) => {
             state.value += action.payload;
         },
-        getPopularMovies: (state, action: PayloadAction<[]>) => {
+        getPopularMovies: (state, action: PayloadAction<any>) => {
             state.movies = action.payload;
         },
     },
@@ -39,9 +34,9 @@ export const moviesSlice = createSlice({
 
 // THUNKS 👇
 
-export const reqPopularMovies = () => async (dispatch:any, state:any) => {
+export const reqPopularMovies = () => (dispatch:any, state:any) => {
     axios.get<AxiosResponse>("https://api.themoviedb.org/3/movie/popular?api_key=5a908f83d771f625cf7b5886d78aebdd&language=fr-FR&page=1")
-    .then((res) => (dispatch(getPopularMovies(res.data))))
+    .then((res:any) => (dispatch(getPopularMovies(res.data))))
 }
 
 // Selector 👇
