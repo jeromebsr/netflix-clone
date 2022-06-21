@@ -1,26 +1,28 @@
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { increment, getValue, incrementWithNumber, getPopularMovies, reqPopularMovies } from '../features/moviesSlice';
-import { useState, useEffect } from 'react';
+import { getMovies, reqUpcomingMovies } from '../features/moviesSlice';
+import { useEffect, useState } from 'react';
 
 function Header() {
     const dispatch = useAppDispatch();
-    const data = useAppSelector(getPopularMovies);
+    const data = useAppSelector(getMovies);
+    const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
-        dispatch(reqPopularMovies())
+        dispatch(reqUpcomingMovies()).then(setLoading(false))
     }, [])
 
-    console.log(data);
+    if(isLoading) {
+        return <div>Loading...</div>
+    }
 
+    console.log(data);
     return (
-        <div>
-            <h1 className="text-3xl font-bold underline">
-                Hello world!
-            </h1>
-            {
-                data.payload.movies.data[0]?.results.map((movie) => console.log(movie))
-            }
-        </div>
+        data?.map && data.map((movie) => (
+            <div>
+                <h2 key={movie.id}>{movie.title}</h2>
+                <img src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`} alt="Couverture du film" />
+            </div>
+        ))
     );
 }
 

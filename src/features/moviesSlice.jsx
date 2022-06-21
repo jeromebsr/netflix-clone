@@ -1,39 +1,61 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-const API_URL = `https://api.themoviedb.org/3/movie/latest?api_key=${process.env.REACT_APP_API_KEY}&language=fr-FR`;
 
 export const moviesSlice = createSlice({
     name: 'movies',
-    initialState : {
-        data: []
+    initialState: {
+        data: {
+            latest: {},
+            popular: {},
+            topRated: {},
+            upcoming: {},
+        },
     },
     reducers: {
-        increment: (state) => {
-            state.value += 1;
+        latestMovie: (state, {payload}) => {
+            state.data = payload.latestMovie;
         },
-        incrementWithNumber: (state, {payload}) => {
-            state.value += payload;
-        },
-        getPopularMovies: (state, {payload}) => {
-            state.data = [payload];
-        },
+        upcomingMovies: (state, {payload}) => {
+            state.data = payload.upcomingMovies;
+        }
     },
 });
 
-// THUNKS 👇
+// Thunks 👇
 
-export const reqPopularMovies = () => async (dispatch, state) => {
+export const reqLatestMovies = () => async (dispatch, state) => {
     try {
-        const res = await axios.get(`${API_URL}`)
-        .then((res) => (dispatch(getPopularMovies(res.data))))
+        await axios.get(`https://api.themoviedb.org/3/movie/latest?api_key=${process.env.REACT_APP_API_KEY}&language=fr-FR}`)
+        .then((res) => (dispatch(latestMovie({ latestMovie: res.data }))))
+
+        return state().movies.latest;
     } catch (err) {
-        throw new Error(err)
+        console.log(err);
+    }
+}
+
+export const reqUpcomingMovies = () => async (dispatch, state) => {
+    try {
+        await axios.get(`https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.REACT_APP_API_KEY}&language=fr-FR&page=1`)
+        .then((res) => (dispatch(upcomingMovies({ upcomingMovies: res.data.results }))))
+
+        return state().movies.upcoming;
+    } catch (err) {
+        console.log(err);
     }
 }
 
 // Selector 👇
 
-export const getValue = (state) => state.movies.value;
+export const getMovies = (state) => state.movies.data;
 
-export const { increment, incrementWithNumber, getPopularMovies } = moviesSlice.actions;
+// Actions 👇
+
+export const { 
+    increment, 
+    incrementWithNumber, 
+    latestMovie, 
+    upcomingMovies
+ } = moviesSlice.actions;
+
 export default moviesSlice.reducer;
