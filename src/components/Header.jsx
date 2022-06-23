@@ -19,7 +19,7 @@ function Header() {
     if(isLoading) {
         return <div></div>
     }
-    console.log(data);
+    
     return (
         <div>
             <div className="header-container">
@@ -36,7 +36,6 @@ function Header() {
                     <button><i class="fa-solid fa-circle-info"></i> Plus d'infos</button>
                 </div>
             </div>
-            
             <img
                 className="image-layer"
                 src={`https://image.tmdb.org/t/p/original/${data.movieDetails.backdrop_path}`} alt="Couverture du film" 
