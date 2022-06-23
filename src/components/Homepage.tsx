@@ -1,8 +1,9 @@
+import axios from "axios";
 import Header from "./Header";
 import Navigation from "./Navigation";
 
 
-function Homepage() {
+function Homepage() {   
     return (
         <div>
             <Navigation />
