@@ -1,12 +1,15 @@
 import { useState, useRef, useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { getMovies, reqPopular } from '../features/moviesSlice';
 
-// Data
-import data from './data.json';
-
-const Carousel = () => {
+const Carousel = ({ listname, type, variant }) => {
+  console.log(type, variant);
   const maxScrollWidth = useRef(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   const carousel = useRef(null);
+  const dispatch = useAppDispatch();
+  const data = useAppSelector(getMovies);
+  const [isLoading, setLoading] = useState(true);
 
   const movePrev = () => {
     if (currentIndex > 0) {
@@ -40,19 +43,27 @@ const Carousel = () => {
   useEffect(() => {
     if (carousel !== null && carousel.current !== null) {
       carousel.current.scrollLeft = carousel.current.offsetWidth * currentIndex;
-    }
-  }, [currentIndex]);
-
-  useEffect(() => {
-    maxScrollWidth.current = carousel.current
+      maxScrollWidth.current = carousel.current
       ? carousel.current.scrollWidth - carousel.current.offsetWidth
       : 0;
-  }, []);
+    }
+    
+    dispatch(reqPopular(variant, type));
+
+    setTimeout(() => {
+      setLoading(false)
+    }, 1000)
+   
+  }, [currentIndex, dispatch]);
+
+  if(isLoading) {
+    return <div></div>
+  }
 
   return (
     <div className="carousel my-12 mx-auto">
-      <h2 className="text-4xl leading-8 font-semibold mb-12 text-slate-700">
-        Our epic carousel
+      <h2 className="text-3xl leading-8 font-semibold mb-5 text-white-700">
+        {listname}
       </h2>
       <div className="relative overflow-hidden">
         <div className="flex justify-between absolute top left w-full h-full">
@@ -79,7 +90,7 @@ const Carousel = () => {
           </button>
           <button
             onClick={moveNext}
-            className="hover:bg-blue-900/75 text-white w-10 h-full text-center opacity-75 hover:opacity-100 disabled:opacity-25 disabled:cursor-not-allowed z-10 p-0 m-0 transition-all ease-in-out duration-300"
+            className="text-white w-10 h-full text-center opacity-75 hover:opacity-100 disabled:opacity-25 disabled:cursor-not-allowed z-10 p-0 m-0 transition-all ease-in-out duration-300"
             disabled={isDisabled('next')}
           >
             <svg
@@ -103,34 +114,33 @@ const Carousel = () => {
           ref={carousel}
           className="carousel-container relative flex gap-1 overflow-hidden scroll-smooth snap-x snap-mandatory touch-pan-x z-0"
         >
-          {data.resources.map((resource, index) => {
-            return (
-              <div
-                key={index}
-                className="carousel-item text-center relative w-64 h-64 snap-start"
-              >
-                <a
-                  href={resource.link}
+          {console.log(data)}
+          {data[type].map((movie, index) => (
+            <div
+              key={index}
+              className="carousel-item text-center relative w-64 h-64 snap-start"
+            >
+              <a
+                  href=""
                   className="h-full w-full aspect-square block bg-origin-padding bg-left-top bg-cover bg-no-repeat z-0"
-                  style={{ backgroundImage: `url(${resource.imageUrl || ''})` }}
-                >
-                  <img
-                    src={resource.imageUrl || ''}
-                    alt={resource.title}
+                  style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original/${movie.backdrop_path})` }}
+              >
+                <img
+                    src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
+                    alt={movie.title}
                     className="w-full aspect-square hidden"
-                  />
-                </a>
-                <a
-                  href={resource.link}
+                />
+              </a>
+              <a
+                  href=""
                   className="h-full w-full aspect-square block absolute top-0 left-0 transition-opacity duration-300 opacity-0 hover:opacity-100 bg-blue-800/75 z-10"
-                >
-                  <h3 className="text-white py-6 px-3 mx-auto text-xl">
-                    {resource.title}
-                  </h3>
-                </a>
-              </div>
-            );
-          })}
+              >
+                <h3 className="text-white py-6 px-3 mx-auto text-xl">
+                    {movie.title}
+                </h3>
+              </a>
+            </div>
+          ))}
         </div>
       </div>
     </div>

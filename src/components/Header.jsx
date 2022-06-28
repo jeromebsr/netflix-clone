@@ -32,8 +32,8 @@ function Header() {
                 </div>
 
                 <div className="header-buttons">
-                    <button><i class="fa-solid fa-play"></i> Lecture</button>
-                    <button><i class="fa-solid fa-circle-info"></i> Plus d'infos</button>
+                    <button><i className="fa-solid fa-play"></i> Lecture</button>
+                    <button><i className="fa-solid fa-circle-info"></i> Plus d'infos</button>
                 </div>
             </div>
             <img

@@ -106,12 +106,14 @@ body {
 }
 
 .header-container {
-    position: absolute;
+    position: relative;
     top: 40%;
     left: 4%;
 }
 
 .header-movie-image-logo {
+    top: 0;
+    margin-top: 7vw;
     margin-bottom: 1.2vw;
 }
 
@@ -146,4 +148,32 @@ body {
 
 .header-buttons button:hover {
     background-color: rgba(255,255,255,0.75);
+}
+
+.carousel {
+    margin-top: 7vw;
+}
+
+.carousel-item {
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.carousel button {
+    height: 145px;
+}
+
+.carousel button:hover {
+    background-color: rgba(20,20,20,.5);
+}
+
+.carousel a {
+    width: 258px;
+    height: 145px;
+    border-radius: 4px;
+}
+
+.carousel a:hover, .carousel img:hover {
+    width: 358px;
+    height: 300px;
 }

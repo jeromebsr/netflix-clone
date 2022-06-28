@@ -5,7 +5,7 @@ export const moviesSlice = createSlice({
     name: 'movies',
     initialState: {
         data: {
-            latest: {},
+            latestMovie: {},
             popular: {},
             topRated: {},
             upcoming: {},
@@ -16,10 +16,13 @@ export const moviesSlice = createSlice({
     },
     reducers: {
         latestMovie: (state, {payload}) => {
-            state.data = payload.latestMovie;
+            state.data.latestMovie = payload.latestMovie;
+        },
+        popular: (state, {payload}) => {
+            state.data.popular = payload.popular;
         },
         upcomingMovies: (state, {payload}) => {
-            state.data = payload.upcomingMovies;
+            state.data.upcomingMovies = payload.upcomingMovies;
         },
         movieDetails: (state, {payload}) => {
             state.data.movieDetails = payload.movieDetails;
@@ -32,24 +35,19 @@ export const moviesSlice = createSlice({
 
 // Thunks 👇
 
-export const reqLatestMovies = () => async (dispatch, state) => {
+/**
+ * 
+ * @param {String} type (eg: movie, tv...)
+ * @param {String} variant (eg: popular, latest...)
+ * @returns 
+ */
+export const reqPopular = (type, variant) => async (dispatch, state) => {
     try {
-        await axios.get(`https://api.themoviedb.org/3/movie/latest?api_key=${process.env.REACT_APP_API_KEY}&language=fr-FR}`)
-        .then((res) => (dispatch(latestMovie({ latestMovie: res.data }))))
+        await axios.get(`https://api.themoviedb.org/3/${type}/${variant}?api_key=${process.env.REACT_APP_API_KEY}&language=fr-FR&page=1`)
+        .then((res) => dispatch(popular({ popular: res.data.results })))
 
-        return state().movies.latest;
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-export const reqUpcomingMovies = () => async (dispatch, state) => {
-    try {
-        await axios.get(`https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.REACT_APP_API_KEY}&language=fr-FR&page=1`)
-        .then((res) => (dispatch(upcomingMovies({ upcomingMovies: res.data.results }))))
-
-        return state().movies.upcoming;
-    } catch (err) {
+        return state().movies.popular;
+    } catch(err) {
         console.log(err);
     }
 }
@@ -90,10 +88,9 @@ export const getMovies = (state) => state.movies.data;
 
 // Actions 👇
 
-export const { 
-    increment, 
-    incrementWithNumber, 
+export const {  
     latestMovie, 
+    popular,
     upcomingMovies,
     movieDetails,
     movieImages,
