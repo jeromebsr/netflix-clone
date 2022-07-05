@@ -1,9 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { getMovies, reqPopular } from '../features/moviesSlice';
+import { getMovies, reqPopularMovie, reqPopularTv, reqTopRatedTv } from '../features/moviesSlice';
 
-const Carousel = ({ listname, type, variant }) => {
-  console.log(type, variant);
+const Carousel = ({ listname, type }) => {
   const maxScrollWidth = useRef(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   const carousel = useRef(null);
@@ -11,6 +10,24 @@ const Carousel = ({ listname, type, variant }) => {
   const data = useAppSelector(getMovies);
   const [isLoading, setLoading] = useState(true);
 
+  useEffect(() => {
+    if (carousel !== null && carousel.current !== null) {
+      carousel.current.scrollLeft = carousel.current.offsetWidth * currentIndex;
+      maxScrollWidth.current = carousel.current
+      ? carousel.current.scrollWidth - carousel.current.offsetWidth
+      : 0;
+    }
+    
+    dispatch(reqPopularMovie());
+    dispatch(reqPopularTv());
+    dispatch(reqTopRatedTv());
+
+    setTimeout(() => {
+      setLoading(false)
+    }, 1000)
+   
+  }, [currentIndex, dispatch]);
+  
   const movePrev = () => {
     if (currentIndex > 0) {
       setCurrentIndex((prevState) => prevState - 1);
@@ -18,10 +35,7 @@ const Carousel = ({ listname, type, variant }) => {
   };
 
   const moveNext = () => {
-    if (
-      carousel.current !== null &&
-      carousel.current.offsetWidth * currentIndex <= maxScrollWidth.current
-    ) {
+    if (carousel.current !== null && carousel.current.offsetWidth * currentIndex <= maxScrollWidth.current) {
       setCurrentIndex((prevState) => prevState + 1);
     }
   };
@@ -33,28 +47,13 @@ const Carousel = ({ listname, type, variant }) => {
 
     if (direction === 'next' && carousel.current !== null) {
       return (
+        // carousel.current.offsetWidth * currentIndex >= maxScrollWidth.current
         carousel.current.offsetWidth * currentIndex >= maxScrollWidth.current
-      );
+      )
     }
 
     return false;
   };
-
-  useEffect(() => {
-    if (carousel !== null && carousel.current !== null) {
-      carousel.current.scrollLeft = carousel.current.offsetWidth * currentIndex;
-      maxScrollWidth.current = carousel.current
-      ? carousel.current.scrollWidth - carousel.current.offsetWidth
-      : 0;
-    }
-    
-    dispatch(reqPopular(variant, type));
-
-    setTimeout(() => {
-      setLoading(false)
-    }, 1000)
-   
-  }, [currentIndex, dispatch]);
 
   if(isLoading) {
     return <div></div>
@@ -62,14 +61,14 @@ const Carousel = ({ listname, type, variant }) => {
 
   return (
     <div className="carousel my-12 mx-auto">
-      <h2 className="text-3xl leading-8 font-semibold mb-5 text-white-700">
+      <h2 style={{ paddingLeft: 50 }} className="text-3xl leading-8 font-semibold mb-5 text-white-700">
         {listname}
       </h2>
       <div className="relative overflow-hidden">
         <div className="flex justify-between absolute top left w-full h-full">
           <button
             onClick={movePrev}
-            className="hover:bg-blue-900/75 text-white w-10 h-full text-center opacity-75 hover:opacity-100 disabled:opacity-25 disabled:cursor-not-allowed z-10 p-0 m-0 transition-all ease-in-out duration-300"
+            className="text-white w-10 h-full text-center opacity-75 hover:opacity-100 disabled:opacity-25 disabled:cursor-not-allowed z-10 p-0 m-0 transition-all ease-in-out duration-300"
             disabled={isDisabled('prev')}
           >
             <svg
@@ -114,8 +113,8 @@ const Carousel = ({ listname, type, variant }) => {
           ref={carousel}
           className="carousel-container relative flex gap-1 overflow-hidden scroll-smooth snap-x snap-mandatory touch-pan-x z-0"
         >
-          {console.log(data)}
           {data[type].map((movie, index) => (
+            movie.backdrop_path ? 
             <div
               key={index}
               className="carousel-item text-center relative w-64 h-64 snap-start"
@@ -126,20 +125,43 @@ const Carousel = ({ listname, type, variant }) => {
                   style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original/${movie.backdrop_path})` }}
               >
                 <img
-                    src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
-                    alt={movie.title}
-                    className="w-full aspect-square hidden"
+                  src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
+                  alt={movie.title}
+                  className="w-full aspect-square hidden"
                 />
               </a>
               <a
                   href=""
                   className="h-full w-full aspect-square block absolute top-0 left-0 transition-opacity duration-300 opacity-0 hover:opacity-100 bg-blue-800/75 z-10"
               >
-                <h3 className="text-white py-6 px-3 mx-auto text-xl">
-                    {movie.title}
-                </h3>
+                <div className='slider-content-hidden'>
+                  <div className='slider-content-img'>
+                    <img
+                      src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
+                    />
+                  </div>
+                  <div className="slider-content-body mt-5">
+                    <div style={{ marginRight: 200 }}>
+                      <i className="fa-2xl fa-solid fa-circle-play text-white"></i>
+                      <i className="fa-2xl fa-solid fa-circle-plus"></i>
+                      <i className="fa-2xl fa-solid fa-thumbs-up"></i>
+                    </div>
+                    <div>
+                    <i className="fa-2xl fa-solid fa-circle-chevron-down"></i>
+                    </div>
+                    <div className='pl-2 mt-5 flex flex-row grow'>
+                      <p style={{ fontWeight: 500, color: '#46d369' }} className='mr-2'>Recommandé à 95%</p>
+                      <p style={{ border: '1px solid white' }} className='pl-2 pr-2 mr-2'>16+</p>
+                      <p className='mr-2'>2 h 4 min</p>
+                      <small style={{ border: '1px solid white', fontWeight:600 }} className='pl-2 pr-2'>HD</small>
+                    </div>
+                    <div className='pl-2 mt-5 flex flex-row grow'>
+                      <p style={{ fontWeight: 600 }}>Exaltant  Hip-Hop  Coppétition</p>
+                    </div>
+                  </div>
+                </div>
               </a>
-            </div>
+            </div> : null
           ))}
         </div>
       </div>

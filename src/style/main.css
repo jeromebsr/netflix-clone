@@ -108,7 +108,7 @@ body {
 .header-container {
     position: relative;
     top: 40%;
-    left: 4%;
+    margin-left: 4%;
 }
 
 .header-movie-image-logo {
@@ -127,10 +127,6 @@ body {
     text-shadow: 2px 2px 4px rgba(0,0,0,.45);
     margin-top: .1vw;
     margin-bottom: 1.2vw;
-}
-
-.header-buttons {
-    
 }
 
 .header-buttons button {
@@ -159,6 +155,10 @@ body {
     margin-right: 2px;
 }
 
+.carousel-item {
+    height: 500px;
+}
+
 .carousel button {
     height: 145px;
 }
@@ -173,7 +173,87 @@ body {
     border-radius: 4px;
 }
 
-.carousel a:hover, .carousel img:hover {
-    width: 358px;
-    height: 300px;
+.slider-container {
+    margin-top: -500px;
+    max-width: 100% !important;
+    z-index: -9999;
+}
+
+.slider-content-hidden {
+    background-color: #181818;
+    margin-left: -50px;
+    border-radius: 4px;
+    width: 382px;
+    top: 1894px;
+    left: 784px;
+    z-index: 3;
+    opacity: 1;
+    z-index: 9999;
+    box-shadow: rgba(0, 0, 0, 0.75) 0px 3px 10px;
+}
+
+.slider-content-body {
+    display: flex;
+    flex-direction: row;
+    grid-row: 1;
+    flex-wrap: wrap;
+}
+
+.slider-content-body i {
+    margin: 5px;
+}
+
+/* FOOTER */
+
+.footer {
+    max-width: 980px;
+    margin: 20px auto 0;
+    padding: 0 4%;
+    color: grey;
+}
+
+.footer a, small {
+    color: grey;
+    font-size: 13px;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.footer-icons a {
+    color: white;
+}
+
+.footer-nav-links {
+    font-size: 13px;
+    margin: 0 0 14px 0;
+    padding: 0;
+}
+
+.footer-nav-links {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.footer-nav-links li {
+    flex: 0 0 25%;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+}
+
+.footer-service-code button {
+    border: 1px solid grey;
+    color: grey;
+    padding: 6.5px;
+    font-size: 13px;
+}
+
+.footer-service-code button:hover {
+    color: white;
+}
+
+.footer-copyright {
+    font-size: 11px;
 }

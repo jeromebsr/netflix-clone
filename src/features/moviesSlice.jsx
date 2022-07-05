@@ -6,8 +6,9 @@ export const moviesSlice = createSlice({
     initialState: {
         data: {
             latestMovie: {},
-            popular: {},
-            topRated: {},
+            popularMovie: {},
+            popularTv: {},
+            topRatedMovie: {},
             upcoming: {},
             movieDetails: {},
             movieImages: {},
@@ -18,8 +19,14 @@ export const moviesSlice = createSlice({
         latestMovie: (state, {payload}) => {
             state.data.latestMovie = payload.latestMovie;
         },
-        popular: (state, {payload}) => {
-            state.data.popular = payload.popular;
+        popularMovie: (state, {payload}) => {
+            state.data.popularMovie = payload.popularMovie;
+        },
+        popularTv: (state, {payload}) => {
+            state.data.popularTv = payload.popularTv;
+        },
+        topRatedTv: (state, {payload}) => {
+            state.data.topRatedTv = payload.topRatedTv;
         },
         upcomingMovies: (state, {payload}) => {
             state.data.upcomingMovies = payload.upcomingMovies;
@@ -38,16 +45,42 @@ export const moviesSlice = createSlice({
 /**
  * 
  * @param {String} type (eg: movie, tv...)
- * @param {String} variant (eg: popular, latest...)
  * @returns 
  */
-export const reqPopular = (type, variant) => async (dispatch, state) => {
+export const reqPopularMovie = () => async (dispatch, state) => {
     try {
-        await axios.get(`https://api.themoviedb.org/3/${type}/${variant}?api_key=${process.env.REACT_APP_API_KEY}&language=fr-FR&page=1`)
-        .then((res) => dispatch(popular({ popular: res.data.results })))
+        await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_API_KEY}&language=fr-FR&page=1`)
+        .then((res) => dispatch(popularMovie({ popularMovie: res.data.results })))
 
-        return state().movies.popular;
+        return state().movies.popularMovie;
     } catch(err) {
+        console.log(err);
+    }
+}
+
+/**
+ * 
+ * @param {String} type (eg: movie, tv...)
+ * @returns 
+ */
+ export const reqPopularTv = () => async (dispatch, state) => {
+    try {
+        await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${process.env.REACT_APP_API_KEY}&language=fr-FR&page=1`)
+        .then((res) => dispatch(popularTv({ popularTv: res.data.results })))
+
+        return state().movies.popularTv;
+    } catch(err) {
+        console.log(err);
+    }
+}
+
+export const reqTopRatedTv = () => async (dispatch, state) => {
+    try {
+        await axios.get(`https://api.themoviedb.org/3/tv/top_rated?api_key=${process.env.REACT_APP_API_KEY}&language=fr-FR&page=1`)
+        .then((res) => dispatch(topRatedTv({ topRatedTv: res.data.results })))
+
+        return state().movies.popularTv;
+    }catch(err) {
         console.log(err);
     }
 }
@@ -90,8 +123,10 @@ export const getMovies = (state) => state.movies.data;
 
 export const {  
     latestMovie, 
-    popular,
     upcomingMovies,
+    popularMovie,
+    popularTv,
+    topRatedTv,
     movieDetails,
     movieImages,
  } = moviesSlice.actions;
