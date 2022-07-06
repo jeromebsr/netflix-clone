@@ -1,17 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from 'react';
 import { NavLink } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 
 function Navigation() {
-    const [formSearchStyle, setFormSearchStyle] = useState<string>("form-search"); 
-    const [searchIconActive, setSearchIconActive] = useState<null|string>(null);
+    const [formSearchStyle, setFormSearchStyle] = useState("form-search"); 
+    const [searchIconActive, setSearchIconActive] = useState(null);
+    const [bgColor, setBgColor] = useState('linear-gradient(to bottom,rgba(0,0,0,.7) 10%,rgba(0,0,0,0))');
 
     const handleSearch = () => {
         setFormSearchStyle("form-search-focused")
         setSearchIconActive("search-icon-active")
 
         setTimeout(() => {
-            let input = document.querySelector<any>("input")
+            let input = document.querySelector("input")
             input.focus();   
         })
     }
@@ -21,8 +22,25 @@ function Navigation() {
         setSearchIconActive(null)
     }
 
+    const handleScroll = () => {  
+        window.onscroll = function() {myFunction()};
+
+        function myFunction() {
+            if (document.documentElement.scrollTop > 50) {
+                setBgColor('#0a0a0a')
+            } else {
+                setBgColor('linear-gradient(to bottom,rgba(0,0,0,.7) 10%,rgba(0,0,0,0))');
+
+            }
+        }
+    }
+
     return (
-        <div className="navbar">
+        <div 
+            style={{ background: bgColor }}
+            onScroll={handleScroll()}
+            className="navbar"
+        >
             <ul className="flex flex-row grow">
                 <NavLink to="/">
                     <img className="nav__logo" src={logo} alt="" />

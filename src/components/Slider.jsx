@@ -147,7 +147,7 @@ const Carousel = ({ listname, type }) => {
                       <i className="fa-2xl fa-solid fa-thumbs-up"></i>
                     </div>
                     <div>
-                    <i className="fa-2xl fa-solid fa-circle-chevron-down"></i>
+                      <i className="fa-2xl fa-solid fa-circle-chevron-down"></i>
                     </div>
                     <div className='pl-2 mt-5 flex flex-row grow'>
                       <p style={{ fontWeight: 500, color: '#46d369' }} className='mr-2'>Recommandé à 95%</p>
