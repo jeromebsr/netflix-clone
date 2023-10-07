@@ -2,6 +2,7 @@
   "name": "netflix",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://jeromebsr.github.io/netflix-clone",
   "dependencies": {
     "@headlessui/react": "^1.6.4",
     "@heroicons/react": "^1.0.6",
@@ -27,7 +28,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -51,6 +54,7 @@
     "@babel/preset-env": "^7.18.2",
     "autoprefixer": "^10.4.7",
     "babel-jest": "^28.1.1",
+    "gh-pages": "^6.0.0",
     "jest": "^28.1.1",
     "postcss": "^8.4.14",
     "tailwindcss": "^3.1.2"
